@@ -46,6 +46,7 @@
         <option value="$PROJECT_DIR$/UI/pom.xml" />
         <option value="$PROJECT_DIR$/ui/pom.xml" />
         <option value="$PROJECT_DIR$/shared/pom.xml" />
+        <option value="$PROJECT_DIR$/engine/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

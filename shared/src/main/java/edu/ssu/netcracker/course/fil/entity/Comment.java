@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
 
 /**
  * Created by --- on 25.11.2018.
@@ -12,25 +11,18 @@ import javax.persistence.*;
 
 //hateoas
 @NoArgsConstructor
-@Entity
-@Table(name = "COMMENT_PLAYER")
 public class Comment {
 
     @Getter
     @Setter
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID_COMMENT")
     private long id;
 
     @Getter
     @Setter
-    @Column(name = "PLAYER_COMMENT")
     private long player;
 
     @Getter
     @Setter
-    @Column(name = "TEXT_COMMENT", length = 1000)
     private String text;
 
 

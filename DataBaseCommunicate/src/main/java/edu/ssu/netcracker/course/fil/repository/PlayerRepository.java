@@ -15,4 +15,14 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
     @Query("select c from Player c where c.email = :email and c.password = :password")
     Player findPlayerByEmailAndPassword(@Param("email") String email, @Param("password") String password);
 
+
+    @Query("select c.id from Player c where c.email = :email and c.password = :password")
+    Long selectIdPlayer(@Param("email") String email, @Param("password") String password);
+    //long countPlayerByEmailAndPassword(String email, String password);
+
+    Player findPlayerById(long id);
+
+    Player findPlayerByEmail(String email);
+
+
 }

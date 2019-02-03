@@ -5,112 +5,95 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by --- on 25.11.2018.
  */
 @NoArgsConstructor
-@Entity
-@Table(name = "PLAYER")
 public class Player{
 
     @Getter
     @Setter
-    @Id
-    @Column(name = "ID_PLAYER")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Getter
     @Setter
-    @Column(name = "EMAIL_PLAYER", length = 50, unique = true)
     private String email;
 
     @Getter
     @Setter
-    @Column(name = "BOT")
     private int bot;
 
     @Getter
     @Setter
-    @Column(name = "NAME_PLAYER", length = 50)
     private String name;
 
     @Getter
     @Setter
-    @Column(name = "PASSWORD_PLAYER")
     private String password;
 
     @Getter
     @Setter
-    @Column(name = "WINS_PLAYER")
     private int wins;
 
     @Getter
     @Setter
-    @Column(name = "LOSING_PLAYER")
     private int losing;
 
     @Getter
     @Setter
-    @Column(name = "TIE_PLAYER")
     private int tie;
 
     @Getter
     @Setter
-    @Column(name = "BALANCE")
     private long balance;
 
     @Getter
     @Setter
-    @ManyToMany
-    @JoinTable(name = "BOUGHT_BACK", joinColumns = @JoinColumn(name = "PLAYER_BOUGHT_BACK"), inverseJoinColumns = @JoinColumn(name = "BACK_BOUGHT_BACK"))
-    private Collection<Back> backs;
+    private List<Back> backs;
 
     @Getter
     @Setter
-    @ManyToMany
-    @JoinTable(name = "BOUGHT_FACE", joinColumns = @JoinColumn(name = "PLAYER_BOUGHT_FACE"), inverseJoinColumns = @JoinColumn(name = "FACE_BOUGHT_FACE"))
-    private Collection<Face> faces;
+    private List<Face> faces;
 
     @Getter
     @Setter
-    @ManyToMany
-    @JoinTable(name = "BOUGHT_GAMING_TABLE", joinColumns = @JoinColumn(name = "PLAYER_BOUGHT_TABLE"), inverseJoinColumns = @JoinColumn(name = "TABLE_BOUGHT_TABLE"))
-    private Collection<GamingTable> tables;
+    private List<GamingTable> tables;
 
     @Getter
     @Setter
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PLAYER_RESULT")
-    private Collection<LastResult> lastResults;
+    private List<LastResult> lastResults;
 
     @Getter
     @Setter
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PLAYER_1_SAVED_2")
-    private Collection<SavedGame2> savedGame2;
+    private List<SavedGame2> savedGame2;
 
     @Getter
     @Setter
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PLAYER_1_SAVED_3")
-    private Collection<SavedGame3> savedGame3;
+    private List<SavedGame3> savedGame3;
 
     @Getter
     @Setter
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PLAYER_1_SAVED_4")
-    private Collection<SavedGame4> savedGame4;
+    private List<SavedGame4> savedGame4;
 
     @Getter
     @Setter
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PLAYER1_FRIEND")
-    private Collection<Friend> friends;
+    private List<Friend> friends;
+
+    @Getter
+    @Setter
+    private long playerTable;
+
+    @Getter
+    @Setter
+    private long playerBack;
+
+    @Getter
+    @Setter
+    private long playerFace;
 
     public Player(long id, String email, String name) {
         this.id = id;
@@ -118,7 +101,28 @@ public class Player{
         this.name = name;
     }
 
-    public Player(String email, int bot, String name, String password, int wins, int losing, int tie, long balance, Collection<Back> backs, Collection<Face> faces, Collection<GamingTable> tables, Collection<LastResult> lastResults, Collection<SavedGame2> savedGame2, Collection<SavedGame3> savedGame3, Collection<SavedGame4> savedGame4, Collection<Friend> friends) {
+    public Player(String email, String name, String password) {
+        this.email = email;
+        this.name = name;
+        this.password = password;
+        playerTable = 1;
+        playerBack = 1;
+        playerFace = 1;
+        tables = new ArrayList<>();
+        tables.add(new GamingTable(1));
+        faces = new ArrayList<>();
+        faces.add(new Face(1));
+        backs = new ArrayList<>();
+        backs.add(new Back(1));
+        friends = new ArrayList<>();
+        lastResults = new ArrayList<>();
+        savedGame2 = new ArrayList<>();
+        savedGame3 = new ArrayList<>();
+        savedGame4 = new ArrayList<>();
+    }
+
+    public Player(long id, String email, int bot, String name, String password, int wins, int losing, int tie, long balance, List<Back> backs, List<Face> faces, List<GamingTable> tables, List<LastResult> lastResults, List<SavedGame2> savedGame2, List<SavedGame3> savedGame3, List<SavedGame4> savedGame4, List<Friend> friends, long playerTable, long playerBack, long playerFace) {
+        this.id = id;
         this.email = email;
         this.bot = bot;
         this.name = name;
@@ -135,7 +139,11 @@ public class Player{
         this.savedGame3 = savedGame3;
         this.savedGame4 = savedGame4;
         this.friends = friends;
+        this.playerTable = playerTable;
+        this.playerBack = playerBack;
+        this.playerFace = playerFace;
     }
+
 
     @Override
     public String toString() {

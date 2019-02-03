@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureQuery;
+import java.util.List;
 
 /**
  * Created by --- on 29.11.2018.
@@ -17,27 +18,29 @@ public class ProcedureService {
     @Autowired
     private EntityManager entityManager;
 
-    public void game(LastResult lastResult){
+    public boolean game(List<Long> lastResult){
         StoredProcedureQuery proc = entityManager.createStoredProcedureQuery("game_func")
                 .registerStoredProcedureParameter("id_player_game", long.class, ParameterMode.IN)
-                .setParameter("id_player_game", lastResult.getPlayer())
+                .setParameter("id_player_game", lastResult.get(0))
                 .registerStoredProcedureParameter("id_opponent", long.class, ParameterMode.IN)
-                .setParameter("id_opponent", lastResult.getOpponent())
+                .setParameter("id_opponent", lastResult.get(1))
                 .registerStoredProcedureParameter("rezult", int.class, ParameterMode.IN)
-                .setParameter("rezult", lastResult.getResult());
+                .setParameter("rezult", (int)(long)lastResult.get(2));
         proc.execute();
+        return true;
     }
 
-    public void friendsGame(ResultsFriends resultsFriends){
+    public boolean friendsGame(ResultsFriends resultsFriends){
         StoredProcedureQuery proc = entityManager.createStoredProcedureQuery("game_friend_func")
                 .registerStoredProcedureParameter("id_friends_game", long.class, ParameterMode.IN)
                 .setParameter("id_friends_game", resultsFriends.getFriends())
                 .registerStoredProcedureParameter("rezult", int.class, ParameterMode.IN)
                 .setParameter("rezult", resultsFriends.getResult());
         proc.execute();
+        return true;
     }
 
-    public void save2(SavedGame2 savedGame2){
+    public boolean save2(SavedGame2 savedGame2){
         StoredProcedureQuery proc = entityManager.createStoredProcedureQuery("save_game2_func")
                 .registerStoredProcedureParameter("player1", long.class, ParameterMode.IN)
                 .setParameter("player1", savedGame2.getPlayer1())
@@ -52,9 +55,10 @@ public class ProcedureService {
                 .registerStoredProcedureParameter("trump", String.class, ParameterMode.IN)
                 .setParameter("trump", savedGame2.getTrump());
         proc.execute();
+        return true;
     }
 
-    public void save3(SavedGame3 savedGame3){
+    public boolean save3(SavedGame3 savedGame3){
         StoredProcedureQuery proc = entityManager.createStoredProcedureQuery("save_game3_func")
                 .registerStoredProcedureParameter("player1", long.class, ParameterMode.IN)
                 .setParameter("player1", savedGame3.getPlayer1())
@@ -73,9 +77,10 @@ public class ProcedureService {
                 .registerStoredProcedureParameter("trump", String.class, ParameterMode.IN)
                 .setParameter("trump", savedGame3.getTrump());
         proc.execute();
+        return true;
     }
 
-    public void save4(SavedGame4 savedGame4){
+    public boolean save4(SavedGame4 savedGame4){
         StoredProcedureQuery proc = entityManager.createStoredProcedureQuery("save_game3_func")
                 .registerStoredProcedureParameter("player1", long.class, ParameterMode.IN)
                 .setParameter("player1", savedGame4.getPlayer1())
@@ -98,5 +103,6 @@ public class ProcedureService {
                 .registerStoredProcedureParameter("trump", String.class, ParameterMode.IN)
                 .setParameter("trump", savedGame4.getTrump());
         proc.execute();
+        return true;
     }
 }

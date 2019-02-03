@@ -13,6 +13,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="DataBaseCommunicate" />
         <module name="databasecommunicate" />
+        <module name="engine" />
         <module name="shared" />
         <module name="ui" />
       </profile>
@@ -20,6 +21,7 @@
     <bytecodeTargetLevel>
       <module name="databasecommunicate" target="1.8" />
       <module name="DataBaseCommunicate" target="1.8" />
+      <module name="engine" target="1.8" />
       <module name="Game" target="1.8" />
       <module name="shared" target="1.8" />
       <module name="UI" target="1.8" />

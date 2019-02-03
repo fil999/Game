@@ -2,6 +2,7 @@ package edu.ssu.netcracker.course.fil.ui;
 
 
 
+import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.navigator.Navigator;
@@ -14,6 +15,7 @@ import edu.ssu.netcracker.course.fil.view.MainView;
 /**
  * Created by --- on 08.12.2018.
  */
+@Push
 @SpringUI
 @Theme("mytheme")
 @Title("Главная страница")

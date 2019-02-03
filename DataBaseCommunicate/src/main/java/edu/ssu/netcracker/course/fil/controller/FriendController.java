@@ -18,8 +18,8 @@ public class FriendController {
     private FriendService friendService;
 
     @ResponseBody
-    @RequestMapping(value = "/insertFriend",  method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public int insertFriend(@RequestBody Friend friend) {
-        return friendService.insertFriend(friend);
+    @RequestMapping(value = "/insertFriend/{idPlayer}",  method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Friend insertFriend(@PathVariable(value = "idPlayer") long idPlayer, @RequestBody String emailFriend) {
+        return friendService.insertFriend(emailFriend, idPlayer);
     }
 }

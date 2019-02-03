@@ -1,40 +1,30 @@
 package edu.ssu.netcracker.course.fil.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
 
 /**
  * Created by --- on 25.11.2018.
  */
 @NoArgsConstructor
-@Entity
-@Table(name = "FACE")
 public class Face {
 
     @Getter
     @Setter
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID_FACE")
     private long id;
 
     @Getter
     @Setter
-    @Column(name = "NAME_FACE", length = 50)
     private String name;
 
     @Getter
     @Setter
-    @Column(name = "COST_FACE")
     private int cost;
 
     @Getter
     @Setter
-    @Column(name = "PATCH_FACE", length = 50)
     private String patch;
 
 
@@ -42,6 +32,11 @@ public class Face {
         this.name = name;
         this.cost = cost;
         this.patch = patch;
+    }
+
+    public Face(long id) {
+        this.id = id;
+        patch = "faceDefault";
     }
 
     @Override
@@ -52,5 +47,13 @@ public class Face {
                 ", cost=" + cost +
                 ", patch='" + patch + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object object){
+        Face other = (Face) object;
+        if (id == other.getId()){
+            return true;
+        } return false;
     }
 }

@@ -19,7 +19,7 @@ public class CommentController {
 
     @ResponseBody
     @RequestMapping(value = "/insertComment",  method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public int insertComment(@RequestBody Comment comment){
+    public Number insertComment(@RequestBody Comment comment){
         return commentService.insertComment(comment);
     }
 }

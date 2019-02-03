@@ -18,6 +18,7 @@ public class GamingTableService {
 
 
     public List<GamingTable> selectAllGamingTable(){
-        return gamingTableRepository.findAll();
+        List<GamingTable> tables = gamingTableRepository.findAll();
+        return tables;
     }
 }

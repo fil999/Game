@@ -14,7 +14,7 @@ public class CommentService {
     @Autowired
     private CommentRepository commentRepository;
 
-    public int insertComment(Comment comment){
+    public Number insertComment(Comment comment){
         comment = commentRepository.save(comment);
         if (comment != null){
             return 0;

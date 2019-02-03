@@ -17,6 +17,7 @@
     <module>DataBaseCommunicate</module>
     <module>ui</module>
     <module>shared</module>
+    <module>engine</module>
   </modules>
 
   <dependencies>
