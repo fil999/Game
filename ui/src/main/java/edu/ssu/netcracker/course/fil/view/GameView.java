@@ -135,9 +135,9 @@ public class GameView extends VerticalLayout implements View{
         List<Card> cardPlayer = gameRequest.requestCards(6, game.getIdPlayer());
         game.addCards(cardPlayer);
         showCardsPlayer();
-      //  player2();
-      //  player3();
-      //  player4();
+        //  player2();
+        //  player3();
+        //  player4();
     }
 
     public void setOtherPlayers(int count){
@@ -151,8 +151,8 @@ public class GameView extends VerticalLayout implements View{
             while (buttonPlayer == null) {
 
             }
-                buttonPlayer.setVisible(true);
-                buttonPlayer.setCaption("Бито");
+            buttonPlayer.setVisible(true);
+            buttonPlayer.setCaption("Бито");
 
         });
     }
@@ -284,7 +284,7 @@ public class GameView extends VerticalLayout implements View{
             otherPlayer[n-1] = countNum;
             updateCards(n-1);
         }
-       // updateCards(n-1);
+        // updateCards(n-1);
     }
 
     public void deleteCards(List<Image> cardList){

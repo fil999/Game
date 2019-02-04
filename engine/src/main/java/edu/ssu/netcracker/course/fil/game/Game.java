@@ -27,6 +27,7 @@ public class Game{
     private int uncoveredNum;
     private int exit;                   //количество ответивших
     private boolean friend;
+    private boolean canToss;
 
     public Game(long id, int count, boolean friend){
         this.id = id;
@@ -41,6 +42,7 @@ public class Game{
         uncovered = null;
         uncoveredNum = 0;
         exit = 0;
+        canToss = true;
         mixed();
         setTrump();
     }
@@ -117,11 +119,11 @@ public class Game{
         }
     }
 
-    public List<Card> requestCards(int count, long idPlayer){
+    public List<Card> requestCards(int count, long idPlayer) {
         PlayerGame playerGame = getPlayer(idPlayer).getPlayerGame();
-        int c = Math.min(count, cards.size());
-        List<Card> cards1 = new ArrayList<>(c);
+        List<Card> cards1 = new ArrayList<>();
         synchronized (cards) {
+            int c = Math.min(count, cards.size());
             for (int i = 0; i < c; i++) {
                 cards1.add(cards.remove(0));
             }
@@ -138,7 +140,6 @@ public class Game{
             }*/
             sendCountCards(playerGame);
         }
-
         return cards1;
     }
 
@@ -262,22 +263,25 @@ public class Game{
 
     public boolean putCard(Card card, long idPlayer){      //пойти/подбросить
         synchronized (onTable) {
-            if (onTable.size() < 12) {
-                if (onTable.isEmpty() || canPut(card)) {
-                    DataPlayer dataPlayer = getPlayer(idPlayer);
-                    PlayerGame playerGame = dataPlayer.getPlayerGame();
-                    playerGame.deleteCard(card);
-                    onTable.add(card);
-                    uncovered = card;
-                    exit = 0;
-                    sendCard(card, dataPlayer.getIndex(), 0);
-                    exitPlayer(playerGame);
-                    canBeCovered();
-                    return true;
+            if (canToss) {
+                if (onTable.size() < 12) {
+                    if (onTable.isEmpty() || canPut(card)) {
+                        DataPlayer dataPlayer = getPlayer(idPlayer);
+                        PlayerGame playerGame = dataPlayer.getPlayerGame();
+                        playerGame.deleteCard(card);
+                        onTable.add(card);
+                        uncovered = card;
+                        exit = 0;
+                        sendCard(card, dataPlayer.getIndex(), 0);
+                        exitPlayer(playerGame);
+                        canBeCovered();
+                        canToss = false;
+                        return true;
+                    }
                 }
             }
-            return false;
         }
+        return false;
     }
 
     private boolean isCover(Card card){     //можно ли покрыть
@@ -300,6 +304,7 @@ public class Game{
             PlayerGame playerGame = players.get(i);
             try {
                 OutputStream stream = playerGame.getOutputStream();
+                canToss = true;
                 if (playerGame.getNum() == fighting){
                     stream.write(6);
                 } else {
@@ -318,6 +323,7 @@ public class Game{
                 PlayerGame playerGame = getPlayer(idPlayer).getPlayerGame();
                 playerGame.deleteCard(card);
                 onTable.add(card);
+                canToss = true;
                 if (uncoveredNum > 0) {
                     int index = onTable.indexOf(uncovered);
                     if (index < uncoveredNum) {
@@ -330,10 +336,16 @@ public class Game{
                         return true;
                     } else {
                         uncoveredNum = 0;
+                        /*uncovered = null;
+                        sendCard(card, fighting, 2);
+                        exitPlayer(playerGame);
+                        exitGame();
+                        canToss();
+                        return true;*/
                     }
                 }
                 uncovered = null;
-                sendCard(card, fighting, 2);
+                sendCard(card, fighting, 0);
                 exitPlayer(playerGame);
                 exitGame();
                 canToss();
@@ -346,16 +358,18 @@ public class Game{
 
     private void exitGame() {
         synchronized (players) {
-            if (players.size() == 1) {
-                PlayerGame playerGame = players.get(0);
-                playerGame.setNumberExit(1);
-                players.remove(playerGame);
-                exitplayer.add(playerGame);
-                try {
-                    playerGame.getOutputStream().write(9);
-                    playerGame.getSocket().close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+            if (players.size() < 2) {
+                if (players.size() == 1) {
+                    PlayerGame playerGame = players.get(0);
+                    playerGame.setNumberExit(1);
+                    players.remove(playerGame);
+                    exitplayer.add(playerGame);
+                    try {
+                        playerGame.getOutputStream().write(9);
+                        playerGame.getSocket().close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
                 PlayerGame player = null;
                 for (PlayerGame playerGame1 : exitplayer){
@@ -378,15 +392,17 @@ public class Game{
                 for (int i = 0; i < num; i++){
                     requests.rezult(exitplayer.get(i).getId(), player.getId(), 1);
                 }
+                new GameService().exitGame(this);
             }
         }
-        new GameService().exitGame(this);
+
     }
 
     private void transitionFighting(boolean flag){      //переход хода
         onTable = new ArrayList<>();
         uncovered = null;
         uncoveredNum = 0;
+        canToss = true;
         if (players.isEmpty() || players.size() == 1){
             exitGame();
         }

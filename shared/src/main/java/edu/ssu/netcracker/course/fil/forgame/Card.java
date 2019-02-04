@@ -1,16 +1,9 @@
-package edu.ssu.netcracker.course.fil;
-
-import com.vaadin.server.FileResource;
-import com.vaadin.ui.Image;
-
-import java.io.File;
-import java.io.Serializable;
+package edu.ssu.netcracker.course.fil.forgame;
 
 /**
- * Created by --- on 11.12.2018.
+ * Created by --- on 03.02.2019.
  */
-
-public class Card implements Serializable {
+public class Card {
 
     private int number;
     private char suit;
@@ -54,4 +47,3 @@ public class Card implements Serializable {
         return String.valueOf(number) + String.valueOf(suit);
     }
 }
-

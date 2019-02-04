@@ -10,7 +10,6 @@ public class EngineApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(EngineApplication.class, args);
-//		new Test().request();
 		new Thread(new GameSockets()).start();
 		new Thread(new MainSockets()).start();
 	}

@@ -18,6 +18,7 @@
     <module>ui</module>
     <module>shared</module>
     <module>engine</module>
+    <module>bot</module>
   </modules>
 
   <dependencies>

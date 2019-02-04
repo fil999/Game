@@ -25,18 +25,18 @@ public class GameSockets implements Runnable{
                 byte[] bytes = new byte[n];
                 connection.getInputStream().read(bytes);
                 long id = Long.parseLong(new String(bytes));
-                int transfer = connection.getInputStream().read();
+                //int transfer = connection.getInputStream().read();
                 int who = connection.getInputStream().read();
-                if (who == 0) {
-                    int count = connection.getInputStream().read();
-                    gameService.addPlayer(connection, id, count, transfer);
-                } else {
-                    n = connection.getInputStream().read();
-                    bytes = new byte[n];
-                    connection.getInputStream().read(bytes);
-                    long idGame = Long.parseLong(new String(bytes));
-                    gameService.addPlayer(connection, id, idGame);
-                }
+//                if (who == 0) {
+//                    int count = connection.getInputStream().read();
+//                    gameService.addPlayer(connection, id, count, transfer);
+//                } else {
+                n = connection.getInputStream().read();
+                bytes = new byte[n];
+                connection.getInputStream().read(bytes);
+                long idGame = Long.parseLong(new String(bytes));
+                gameService.addPlayer(connection, id, idGame, who);
+                //  }
 
             }
         }catch (Exception e){

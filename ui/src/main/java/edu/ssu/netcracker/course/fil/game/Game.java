@@ -23,7 +23,6 @@ public class Game {
     private boolean startGame;
     private int myNum;
     private int count;
-    private boolean first;
 
     private String[] places;
     private int numberPlace;
@@ -38,7 +37,6 @@ public class Game {
         this.startGame = false;
         cards = new ArrayList<>();
         numberPlace = 0;
-        first = true;
         createPlaces();
     }
 
@@ -58,10 +56,6 @@ public class Game {
             }
             top += 200;
         }
-    }
-
-    public boolean isFirst() {
-        return first;
     }
 
     public boolean isTransfer() {
@@ -97,7 +91,6 @@ public class Game {
     }
 
     public void cardOnTable(Card card, int num, int whatDo){
-        first = false;
         if (whatDo == 1){
             numberPlace++;
         }
@@ -166,7 +159,6 @@ public class Game {
     }
 
     public void isExit(){
-        first = true;
         gameView.isExit();
     }
 

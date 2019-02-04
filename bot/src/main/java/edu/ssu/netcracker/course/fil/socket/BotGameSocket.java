@@ -1,60 +1,46 @@
-package edu.ssu.netcracker.course.fil.game;
+package edu.ssu.netcracker.course.fil.socket;
 
-import edu.ssu.netcracker.course.fil.Card;
+import edu.ssu.netcracker.course.fil.forgame.Card;
+import edu.ssu.netcracker.course.fil.play.Play;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
 /**
- * Created by --- on 12.01.2019.
+ * Created by --- on 03.02.2019.
  */
-public class GameSocket implements Runnable{
+public class BotGameSocket implements Runnable {
 
-    private Game game;
-    private int count;
-    private boolean friends;
+    private boolean transfer;
+    private long idGame;
+    private Play play;
 
-    public GameSocket(Game game, int count){
-        this.game = game;
-        this.count = count;
-        this.friends = false;
+    public BotGameSocket(boolean transfer, long idGame, Play play) {
+        this.transfer = transfer;
+        this.idGame = idGame;
+        this.play = play;
     }
 
-    public GameSocket(Game game){
-        this.game = game;
-        this.friends = true;
-    }
 
     @Override
     public void run() {
         try {
             Socket socket = new Socket(InetAddress.getByName("127.0.0.1"), 8083);
-            byte[] bytes = String.valueOf(game.getIdPlayer()).getBytes();
+            byte[] bytes = String.valueOf(-1).getBytes();
             socket.getOutputStream().write(bytes.length);
             socket.getOutputStream().write(bytes);
-//            if (game.isTransfer()){
+//            if (transfer) {
 //                socket.getOutputStream().write(0);
 //            } else {
 //                socket.getOutputStream().write(1);
 //            }
-            if (friends){
-                socket.getOutputStream().write(1);
-//                bytes = String.valueOf(game.getIdGame()).getBytes();
-//                socket.getOutputStream().write(bytes.length);
-//                socket.getOutputStream().write(bytes);
-            } else {
-                socket.getOutputStream().write(0);
-//                socket.getOutputStream().write(count);
-            }
-            bytes = String.valueOf(game.getIdGame()).getBytes();
+            socket.getOutputStream().write(0);
+            bytes = String.valueOf(idGame).getBytes();
             socket.getOutputStream().write(bytes.length);
             socket.getOutputStream().write(bytes);
-
             socket.getOutputStream().flush();
             InputStream inputStream = socket.getInputStream();
             while (true) {
@@ -67,10 +53,12 @@ public class GameSocket implements Runnable{
                         long id = Long.parseLong(new String(bytes1));
                         int myNum = inputStream.read();
                         int count = inputStream.read();
-                        game.setCount(count);
-                        game.setMyNum(myNum);
-                        game.setIdPlayer(id);
-                        game.setStartGame(true);
+                        play.setIdPlayer(id);
+                        play.startGame();
+                       // game.setCount(count);
+                       // game.setMyNum(myNum);
+                        //game.setIdPlayer(id);
+                       // game.setStartGame(true);
                         break;
                     case 1:
                         char suit = (char) inputStream.read();
@@ -78,38 +66,45 @@ public class GameSocket implements Runnable{
                         int num = inputStream.read();
                         Card card = new Card(number, suit);
                         int whatDo = inputStream.read();
-                        game.cardOnTable(card, num, whatDo);
+                        play.cardOnTable(card, whatDo);
+                       // game.cardOnTable(card, num, whatDo);
                         break;
                     case 2:
-                        game.setCanToss(true);
+                       // game.setCanToss(true);
+                        play.setCanToss();
                         break;
                     case 3:
-                        game.setCanToss(false);
+                       // game.setCanToss(false);
                         break;
                     case 4:
-                        game.setCanCovered(true);
+                        //game.setCanCovered(true);
+                        play.setCanCovered();
                         break;
                     case 5:
-                        game.setCanCovered(false);
+                       // game.setCanCovered(false);
                         break;
                     case 6:
-                        game.waiting();
+                        play.waiting();
+                        //game.waiting();
                         break;
                     case 7:
-                        game.isExit();
+                        //game.isExit();
+                        play.isExit();
                         break;
                     case 8:
-                        game.win();
+                        //game.win();
                         socket.close();
+                        play.exitGame();
                         return;
                     case 9:
-                        game.lose();
+                        //game.lose();
                         socket.close();
+                        play.exitGame();
                         return;
                     case 10:
                         int numOther = inputStream.read();
                         int countOther = inputStream.read();
-                        game.updateOtherCards(numOther, countOther);
+                        //game.updateOtherCards(numOther, countOther);
                         break;
                 }
             }
@@ -120,4 +115,3 @@ public class GameSocket implements Runnable{
         }
     }
 }
-
